@@ -113,7 +113,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Gemi PDA Hesaplama</h1>
+        <h1>PDA Hesaplama Aracı</h1>
         <form id="calculatorForm" onsubmit="calculateDues(); return false;">
             <div class="form-group">
                 <label for="nrt">NRT (Net Register Tonnage):</label>
@@ -126,17 +126,17 @@
             </div>
 
             <div class="form-group">
-                <label for="days">Limanda kaç gün kalacak:</label>
+                <label for="days">Limandaki operasyon süresi:</label>
                 <input type="number" id="days" name="days" required>
             </div>
 
             <div class="form-group">
-                <label for="freight">Yük miktarı:</label>
+                <label for="freight">Yük miktarı (MT):</label>
                 <input type="number" id="freight" name="freight" required>
             </div>
 
             <div class="form-group">
-                <label for="bothLoadingAndUnloading">Hem yükleme hem tahliye yapılacaksa işaretleyin:</label>
+                <label for="bothLoadingAndUnloading">Tek limanda çift operasyon varsa işaretleyin:</label>
                 <input type="checkbox" id="bothLoadingAndUnloading" name="bothLoadingAndUnloading">
             </div>
 
@@ -144,14 +144,14 @@
                 <label for="cargoType">Yükün cinsi:</label>
                 <select id="cargoType" name="cargoType" required>
                     <option value="grain">Tahıl</option>
-                    <option value="bulkSolid">Katı dökme yük</option>
-                    <option value="nonBulkIronSteel">Dökme olmayan adetli demir çelik yükü</option>
-                    <option value="oil">Petrol harici yağlar</option>
+                    <option value="bulkSolid">Dökme yük hurda vb.</option>
+                    <option value="nonBulkIronSteel">Dökme olmayan demir çelik</option>
+                    <option value="oil">Petrol dışı yağlar</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="anchoragePeriod">Demir ücreti hesaplaması:</label>
+                <label for="anchoragePeriod">Demirleme ücreti:</label>
                 <select id="anchoragePeriod" name="anchoragePeriod" required>
                     <option value="daily">Günlük</option>
                     <option value="monthly">Aylık</option>
@@ -161,6 +161,11 @@
             <div class="form-group">
                 <label for="inIzmitBay">Gemi İzmit körfezine geliyorsa işaretleyin:</label>
                 <input type="checkbox" id="inIzmitBay" name="inIzmitBay">
+            </div>
+
+            <div class="form-group">
+                <label for="fromTurkishPort">Gemi başka bir türk limanından geliyorsa işaretleyin:</label>
+                <input type="checkbox" id="fromTurkishPort" name="fromTurkishPort">
             </div>
 
             <button type="submit">HESAPLA</button>
@@ -792,6 +797,21 @@
             return baseRate;
         }
 
+        function applyRules(oilCargo, fromTurkishPort) {
+            var chargeMultiplier = 1;
+            if (oilCargo) {
+                chargeMultiplier = 1.3;
+            }
+
+            var multiplier2x = 2;
+
+            return {
+                chargeMultiplier: chargeMultiplier,
+                multiplier2x: multiplier2x,
+                zeroCharges: fromTurkishPort
+            };
+        }
+
         function calculateDues() {
             var nrt = document.getElementById("nrt").value;
             var grt = document.getElementById("grt").value;
@@ -801,26 +821,34 @@
             var cargoType = document.getElementById("cargoType").value;
             var anchoragePeriod = document.getElementById("anchoragePeriod").value;
             var inIzmitBay = document.getElementById("inIzmitBay").checked;
+            var fromTurkishPort = document.getElementById("fromTurkishPort").checked;
+
+            var rules = applyRules(cargoType === "oil", fromTurkishPort);
 
             var harbourMastersDue = calculateHarbourMastersDue(nrt);
             var berthDues = calculateBerthDues(grt, days);
-            var pilotageIzmitBay = calculatePilotageIzmitBay(grt, inIzmitBay);
-            var pilotageMooringUnmooring = calculatePilotageMooringUnmooring(grt);
-            var tugBoat = calculateTugBoat(grt);
+            var pilotageIzmitBay = calculatePilotageIzmitBay(grt, inIzmitBay) * rules.multiplier2x * rules.chargeMultiplier;
+            var pilotageMooringUnmooring = calculatePilotageMooringUnmooring(grt) * rules.multiplier2x * rules.chargeMultiplier;
+            var tugBoat = calculateTugBoat(grt) * rules.chargeMultiplier;
             var sanitaryDues = calculateSanitaryDues(nrt);
             var garbageDues = calculateGarbageDues(grt);
-            var mooringUnmooring = calculateMooringUnmooring(grt);
+            var mooringUnmooring = calculateMooringUnmooring(grt)  * rules.chargeMultiplier;
             var anchorageDues = calculateAnchorageDues(grt, anchoragePeriod);
-            var pilotageFeeForAnchorage = calculatePilotageFeeForAnchorage(grt, inIzmitBay);
+            var pilotageFeeForAnchorage = calculatePilotageFeeForAnchorage(grt, inIzmitBay) * rules.chargeMultiplier;
             var supervision = calculateSupervision(freight, cargoType);
             var agencyFee = calculateAgencyFee(nrt);
             var contributionToMaritimeChamber = calculateContributionToMaritimeChamber(grt);
             var maritimeChamberShare = calculateMaritimeChamberShare(freight, bothLoadingAndUnloading);
 
+            if (rules.zeroCharges) {
+                garbageDues = 0;
+                sanitaryDues = 0;
+            }
+
             var resultText = `
                 <table>
                     <tr>
-                        <th>Masraf kalemi</th>
+                        <th>Masraf Kalemi</th>
                         <th>Tutar</th>
                     </tr>
                     <tr>
@@ -833,15 +861,15 @@
                     </tr>
                     <tr>
                         <td>Pilotage (Izmit Bay In + Out)</td>
-                        <td>${pilotageIzmitBay} USD</td>
+                        <td>${pilotageIzmitBay.toFixed(2)} USD</td>
                     </tr>
                     <tr>
                         <td>Pilotage (Mooring + Unmooring)</td>
-                        <td>${pilotageMooringUnmooring} USD</td>
+                        <td>${pilotageMooringUnmooring.toFixed(2)} USD</td>
                     </tr>
                     <tr>
                         <td>Tug Boat (Mooring + Unmooring)</td>
-                        <td>${tugBoat} USD</td>
+                        <td>${tugBoat.toFixed(2)} USD</td>
                     </tr>
                     <tr>
                         <td>Sanitary Dues</td>
@@ -853,19 +881,19 @@
                     </tr>
                     <tr>
                         <td>Mooring & Unmooring</td>
-                        <td>${mooringUnmooring} USD</td>
+                        <td>${mooringUnmooring.toFixed(2)} USD</td>
                     </tr>
                     <tr>
                         <td>Anchorage Dues</td>
-                        <td>${anchorageDues} USD</td>
+                        <td>${anchorageDues.toFixed(2)} USD</td>
                     </tr>
                     <tr>
                         <td>Pilotage Fee for Anchorage</td>
-                        <td>${pilotageFeeForAnchorage} USD</td>
+                        <td>${pilotageFeeForAnchorage.toFixed(2)} USD</td>
                     </tr>
                     <tr>
                         <td>Supervision</td>
-                        <td>${supervision} EUR</td>
+                        <td>${supervision.toFixed(2)} EUR</td>
                     </tr>
                     <tr>
                         <td>Agency Fee</td>
@@ -896,6 +924,11 @@
                         <td>Lütfen yerel ofise veya Selahattin Abi'ye danışın.</td>
                     </tr>
                 </table>
+                <p><strong>Not:</strong> <ul>
+                    <li>PDA hesaplanırken resmi tatil günlerinden oluşan zamlar hesaba katılmaz. </li>
+                        <li>Lütfen para birimlerine dikkat edin!</li>
+                        </ul>
+                        </p>
             `;
 
             document.getElementById("result").innerHTML = resultText;
