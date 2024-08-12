@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ship Charges Calculator</title>
+    <title>PDA HESAPLAMA ARACI</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -111,55 +111,54 @@
         }
 
         @media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
+            body {
+                padding: 10px;
+            }
 
-    .container {
-        width: 100%;
-        padding: 15px;
-        box-shadow: none;
-    }
+            .container {
+                width: 100%;
+                padding: 15px;
+                box-shadow: none;
+            }
 
-    h1 {
-        font-size: 20px;
-    }
+            h1 {
+                font-size: 20px;
+            }
 
-    label {
-        font-size: 14px;
-    }
+            label {
+                font-size: 14px;
+            }
 
-    input[type="number"],
-    input[type="checkbox"],
-    select {
-        padding: 6px;
-        font-size: 14px;
-    }
+            input[type="number"],
+            input[type="checkbox"],
+            select {
+                padding: 6px;
+                font-size: 14px;
+            }
 
-    button {
-        padding: 8px;
-        font-size: 14px;
-    }
+            button {
+                padding: 8px;
+                font-size: 14px;
+            }
 
-    .result {
-        font-size: 14px;
-        padding: 10px;
-    }
+            .result {
+                font-size: 14px;
+                padding: 10px;
+            }
 
-    table {
-        font-size: 14px;
-    }
+            table {
+                font-size: 14px;
+            }
 
-    th, td {
-        padding: 8px;
-    }
-}
-
+            th, td {
+                padding: 8px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>PDA Hesaplama Aracı</h1>
+        <h1>PDA HESAPLAMA ARACI</h1>
         <form id="calculatorForm" onsubmit="calculateDues(); return false;">
             <div class="form-group">
                 <label for="nrt">NRT (Net Register Tonnage):</label>
@@ -182,22 +181,22 @@
             </div>
 
             <div class="form-group">
-                <label for="bothLoadingAndUnloading">Tek limanda çift operasyon varsa işaretleyin:</label>
+                <label for="bothLoadingAndUnloading">Tek limanda çift operasyon yapılacaksa işaretleyin:</label>
                 <input type="checkbox" id="bothLoadingAndUnloading" name="bothLoadingAndUnloading">
             </div>
 
             <div class="form-group">
-                <label for="cargoType">Yükün cinsi:</label>
+                <label for="cargoType">Yükün türü:</label>
                 <select id="cargoType" name="cargoType" required>
                     <option value="grain">Tahıl</option>
-                    <option value="bulkSolid">Dökme yük hurda vb.</option>
-                    <option value="nonBulkIronSteel">Dökme olmayan demir çelik</option>
-                    <option value="oil">Petrol dışı yağlar</option>
+                    <option value="bulkSolid">Katı dökme yük hurda vb.</option>
+                    <option value="nonBulkIronSteel">Dökme olmayan demir çelik vb</option>
+                    <option value="oil">Petrol harici yağlar</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="anchoragePeriod">Demirleme ücreti:</label>
+                <label for="anchoragePeriod">Demir ücreti:</label>
                 <select id="anchoragePeriod" name="anchoragePeriod" required>
                     <option value="daily">Günlük</option>
                     <option value="monthly">Aylık</option>
@@ -205,13 +204,23 @@
             </div>
 
             <div class="form-group">
-                <label for="inIzmitBay">Gemi İzmit körfezine geliyorsa işaretleyin:</label>
+                <label for="inIzmitBay">Gemi İzmit körfezine geliyorsa işaretleyin</label>
                 <input type="checkbox" id="inIzmitBay" name="inIzmitBay">
             </div>
 
             <div class="form-group">
-                <label for="fromTurkishPort">Gemi başka bir türk limanından geliyorsa işaretleyin:</label>
+                <label for="fromTurkishPort">Gemi başka bir Türk limanından geliyorsa işaretleyin</label>
                 <input type="checkbox" id="fromTurkishPort" name="fromTurkishPort">
+            </div>
+
+            <div class="form-group">
+                <label for="usdToTl">USD-TL Çapraz kuru girin:</label>
+                <input type="number" id="usdToTl" name="usdToTl" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+                <label for="eurToUsd">EUR-USD Çapraz kuru girin:</label>
+                <input type="number" id="eurToUsd" name="eurToUsd" step="0.01" required>
             </div>
 
             <button type="submit">HESAPLA</button>
@@ -858,6 +867,16 @@
             };
         }
 
+        function convertToUSD(amount, currency, usdToTl, eurToUsd) {
+            if (currency === "TL") {
+                return amount / usdToTl;
+            } else if (currency === "EUR") {
+                return amount * eurToUsd;
+            } else {
+                return amount; // USD ise bir şey yapma
+            }
+        }
+
         function calculateDues() {
             var nrt = document.getElementById("nrt").value;
             var grt = document.getElementById("grt").value;
@@ -868,42 +887,44 @@
             var anchoragePeriod = document.getElementById("anchoragePeriod").value;
             var inIzmitBay = document.getElementById("inIzmitBay").checked;
             var fromTurkishPort = document.getElementById("fromTurkishPort").checked;
+            var usdToTl = document.getElementById("usdToTl").value;
+            var eurToUsd = document.getElementById("eurToUsd").value;
 
             var rules = applyRules(cargoType === "oil", fromTurkishPort);
 
-            var harbourMastersDue = calculateHarbourMastersDue(nrt);
+            var harbourMastersDue = convertToUSD(calculateHarbourMastersDue(nrt), "TL", usdToTl, eurToUsd);
             var berthDues = calculateBerthDues(grt, days);
-            var pilotageIzmitBay = calculatePilotageIzmitBay(grt, inIzmitBay) * rules.multiplier2x * rules.chargeMultiplier;
-            var pilotageMooringUnmooring = calculatePilotageMooringUnmooring(grt) * rules.multiplier2x * rules.chargeMultiplier;
-            var tugBoat = calculateTugBoat(grt) * rules.chargeMultiplier;
-            var sanitaryDues = calculateSanitaryDues(nrt);
-            var garbageDues = calculateGarbageDues(grt);
-            var mooringUnmooring = calculateMooringUnmooring(grt)  * rules.chargeMultiplier;
-            var anchorageDues = calculateAnchorageDues(grt, anchoragePeriod);
-            var pilotageFeeForAnchorage = calculatePilotageFeeForAnchorage(grt, inIzmitBay) * rules.chargeMultiplier;
-            var supervision = calculateSupervision(freight, cargoType);
-            var agencyFee = calculateAgencyFee(nrt);
-            var contributionToMaritimeChamber = calculateContributionToMaritimeChamber(grt);
-            var maritimeChamberShare = calculateMaritimeChamberShare(freight, bothLoadingAndUnloading);
+            var pilotageIzmitBay = convertToUSD(calculatePilotageIzmitBay(grt, inIzmitBay) * rules.multiplier2x * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
+            var pilotageMooringUnmooring = convertToUSD(calculatePilotageMooringUnmooring(grt) * rules.multiplier2x * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
+            var tugBoat = convertToUSD(calculateTugBoat(grt) * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
+            var sanitaryDues = convertToUSD(calculateSanitaryDues(nrt), "TL", usdToTl, eurToUsd);
+            var garbageDues = convertToUSD(calculateGarbageDues(grt), "EUR", usdToTl, eurToUsd);
+            var mooringUnmooring = convertToUSD(calculateMooringUnmooring(grt) * rules.multiplier2x * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
+            var anchorageDues = convertToUSD(calculateAnchorageDues(grt, anchoragePeriod), "USD", usdToTl, eurToUsd);
+            var pilotageFeeForAnchorage = convertToUSD(calculatePilotageFeeForAnchorage(grt, inIzmitBay) * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
+            var supervision = convertToUSD(calculateSupervision(freight, cargoType), "EUR", usdToTl, eurToUsd);
+            var agencyFee = convertToUSD(calculateAgencyFee(nrt), "EUR", usdToTl, eurToUsd);
+            var contributionToMaritimeChamber = convertToUSD(calculateContributionToMaritimeChamber(grt), "TL", usdToTl, eurToUsd);
+            var maritimeChamberShare = convertToUSD(calculateMaritimeChamberShare(freight, bothLoadingAndUnloading), "USD", usdToTl, eurToUsd);
 
             if (rules.zeroCharges) {
                 garbageDues = 0;
-                sanitaryDues = 0;
+                mooringUnmooring = 0;
             }
 
             var resultText = `
                 <table>
                     <tr>
-                        <th>Masraf Kalemi</th>
-                        <th>Tutar</th>
+                        <th>Masraf Kalemleri</th>
+                        <th>Tutar (USD)</th>
                     </tr>
                     <tr>
                         <td>Harbour Master's Due</td>
-                        <td>${harbourMastersDue} TL</td>
+                        <td>${harbourMastersDue.toFixed(2)} USD</td>
                     </tr>
                     <tr>
                         <td>Berth Dues</td>
-                        <td>${berthDues} USD</td>
+                        <td>${berthDues.toFixed(2)} USD</td>
                     </tr>
                     <tr>
                         <td>Pilotage (Izmit Bay In + Out)</td>
@@ -919,11 +940,11 @@
                     </tr>
                     <tr>
                         <td>Sanitary Dues</td>
-                        <td>${sanitaryDues} TL</td>
+                        <td>${sanitaryDues.toFixed(2)} USD</td>
                     </tr>
                     <tr>
                         <td>Garbage Dues</td>
-                        <td>${garbageDues} EUR</td>
+                        <td>${garbageDues.toFixed(2)} USD</td>
                     </tr>
                     <tr>
                         <td>Mooring & Unmooring</td>
@@ -939,11 +960,11 @@
                     </tr>
                     <tr>
                         <td>Supervision</td>
-                        <td>${supervision.toFixed(2)} EUR</td>
+                        <td>${supervision.toFixed(2)} USD</td>
                     </tr>
                     <tr>
                         <td>Agency Fee</td>
-                        <td>${agencyFee} EUR</td>
+                        <td>${agencyFee.toFixed(2)} USD</td>
                     </tr>
                     <tr>
                         <td>Light Dues</td>
@@ -955,11 +976,11 @@
                     </tr>
                     <tr>
                         <td>Contribution to Maritime Chamber</td>
-                        <td>${contributionToMaritimeChamber} TL</td>
+                        <td>${contributionToMaritimeChamber.toFixed(2)} USD</td>
                     </tr>
                     <tr>
                         <td>Maritime Chamber Share from Freight Revenue</td>
-                        <td>${maritimeChamberShare} USD</td>
+                        <td>${maritimeChamberShare.toFixed(2)} USD</td>
                     </tr>
                     <tr>
                         <td>Custom's Overtime</td>
@@ -970,11 +991,7 @@
                         <td>Lütfen yerel ofise veya Selahattin Abi'ye danışın.</td>
                     </tr>
                 </table>
-                <p><strong>Not:</strong> <ul>
-                    <li>PDA hesaplanırken resmi tatil günlerinden oluşan zamlar hesaba katılmaz. </li>
-                        <li>Lütfen para birimlerine dikkat edin!</li>
-                        </ul>
-                        </p>
+                <p><strong>Not:</strong> PDA hesaplanırken resmi tatil günlerinden oluşan zamlar hesaba katılmaz.</p>
             `;
 
             document.getElementById("result").innerHTML = resultText;
