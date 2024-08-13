@@ -878,125 +878,128 @@
             }
         }
 
-        function calculateDues() {
-            var nrt = document.getElementById("nrt").value;
-            var grt = document.getElementById("grt").value;
-            var days = document.getElementById("days").value;
-            var freight = document.getElementById("freight").value;
-            var bothLoadingAndUnloading = document.getElementById("bothLoadingAndUnloading").checked;
-            var cargoType = document.getElementById("cargoType").value;
-            var anchoragePeriod = document.getElementById("anchoragePeriod").value;
-            var inIzmitBay = document.getElementById("inIzmitBay").checked;
-            var fromTurkishPort = document.getElementById("fromTurkishPort").checked;
-            var usdToTl = document.getElementById("usdToTl").value;
-            var eurToUsd = document.getElementById("eurToUsd").value;
+       function calculateDues() {
+    var nrt = document.getElementById("nrt").value;
+    var grt = document.getElementById("grt").value;
+    var days = document.getElementById("days").value;
+    var freight = document.getElementById("freight").value;
+    var bothLoadingAndUnloading = document.getElementById("bothLoadingAndUnloading").checked;
+    var cargoType = document.getElementById("cargoType").value;
+    var anchoragePeriod = document.getElementById("anchoragePeriod").value;
+    var inIzmitBay = document.getElementById("inIzmitBay").checked;
+    var fromTurkishPort = document.getElementById("fromTurkishPort").checked;
+    var usdToTl = document.getElementById("usdToTl").value;
+    var eurToUsd = document.getElementById("eurToUsd").value;
 
-            var rules = applyRules(cargoType === "oil", fromTurkishPort);
+    var rules = applyRules(cargoType === "oil", fromTurkishPort);
 
-            var harbourMastersDue = convertToUSD(calculateHarbourMastersDue(nrt), "TL", usdToTl, eurToUsd);
-            var berthDues = calculateBerthDues(grt, days);
-            var pilotageIzmitBay = convertToUSD(calculatePilotageIzmitBay(grt, inIzmitBay) * rules.multiplier2x * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
-            var pilotageMooringUnmooring = convertToUSD(calculatePilotageMooringUnmooring(grt) * rules.multiplier2x * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
-            var tugBoat = convertToUSD(calculateTugBoat(grt) * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
-            var sanitaryDues = convertToUSD(calculateSanitaryDues(nrt), "TL", usdToTl, eurToUsd);
-            var garbageDues = convertToUSD(calculateGarbageDues(grt), "EUR", usdToTl, eurToUsd);
-            var mooringUnmooring = convertToUSD(calculateMooringUnmooring(grt) * rules.multiplier2x * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
-            var anchorageDues = convertToUSD(calculateAnchorageDues(grt, anchoragePeriod), "USD", usdToTl, eurToUsd);
-            var pilotageFeeForAnchorage = convertToUSD(calculatePilotageFeeForAnchorage(grt, inIzmitBay) * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
-            var supervision = convertToUSD(calculateSupervision(freight, cargoType), "EUR", usdToTl, eurToUsd);
-            var agencyFee = convertToUSD(calculateAgencyFee(nrt), "EUR", usdToTl, eurToUsd);
-            var contributionToMaritimeChamber = convertToUSD(calculateContributionToMaritimeChamber(grt), "TL", usdToTl, eurToUsd);
-            var maritimeChamberShare = convertToUSD(calculateMaritimeChamberShare(freight, bothLoadingAndUnloading), "USD", usdToTl, eurToUsd);
+    var harbourMastersDue = convertToUSD(calculateHarbourMastersDue(nrt), "TL", usdToTl, eurToUsd);
+    var berthDues = calculateBerthDues(grt, days);
+    var pilotageIzmitBay = convertToUSD(calculatePilotageIzmitBay(grt, inIzmitBay) * rules.multiplier2x * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
+    var pilotageMooringUnmooring = convertToUSD(calculatePilotageMooringUnmooring(grt) * rules.multiplier2x * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
+    var tugBoat = convertToUSD(calculateTugBoat(grt) * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
+    var sanitaryDues = convertToUSD(calculateSanitaryDues(nrt), "TL", usdToTl, eurToUsd);
+    var garbageDues = convertToUSD(calculateGarbageDues(grt), "EUR", usdToTl, eurToUsd);
+    var mooringUnmooring = convertToUSD(calculateMooringUnmooring(grt) * rules.multiplier2x * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
+    var anchorageDues = convertToUSD(calculateAnchorageDues(grt, anchoragePeriod), "USD", usdToTl, eurToUsd);
+    var pilotageFeeForAnchorage = convertToUSD(calculatePilotageFeeForAnchorage(grt, inIzmitBay) * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
+    var supervision = convertToUSD(calculateSupervision(freight, cargoType), "EUR", usdToTl, eurToUsd);
+    var agencyFee = convertToUSD(calculateAgencyFee(nrt), "EUR", usdToTl, eurToUsd);
+    var contributionToMaritimeChamber = convertToUSD(calculateContributionToMaritimeChamber(grt), "TL", usdToTl, eurToUsd);
+    var maritimeChamberShare = convertToUSD(calculateMaritimeChamberShare(freight, bothLoadingAndUnloading), "USD", usdToTl, eurToUsd);
 
-            if (rules.zeroCharges) {
-                garbageDues = 0;
-                mooringUnmooring = 0;
-            }
+    // If the ship is arriving from another Turkish port
+    if (fromTurkishPort) {
+        pilotageFeeForAnchorage = 0;
+        sanitaryDues = 0;
+    }
 
-            var resultText = `
-                <table>
-                    <tr>
-                        <th>Masraf Kalemleri</th>
-                        <th>Tutar (USD)</th>
-                    </tr>
-                    <tr>
-                        <td>Harbour Master's Due</td>
-                        <td>${harbourMastersDue.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Berth Dues</td>
-                        <td>${berthDues.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Pilotage (Izmit Bay In + Out)</td>
-                        <td>${pilotageIzmitBay.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Pilotage (Mooring + Unmooring)</td>
-                        <td>${pilotageMooringUnmooring.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Tug Boat (Mooring + Unmooring)</td>
-                        <td>${tugBoat.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Sanitary Dues</td>
-                        <td>${sanitaryDues.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Garbage Dues</td>
-                        <td>${garbageDues.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Mooring & Unmooring</td>
-                        <td>${mooringUnmooring.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Anchorage Dues</td>
-                        <td>${anchorageDues.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Pilotage Fee for Anchorage</td>
-                        <td>${pilotageFeeForAnchorage.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Supervision</td>
-                        <td>${supervision.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Agency Fee</td>
-                        <td>${agencyFee.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Light Dues</td>
-                        <td><a href="https://www.kiyiemniyeti.gov.tr/fener_ve_tahsiliye_ucreti_hesaplayici" target="_blank">Hesapla</a></td>
-                    </tr>
-                    <tr>
-                        <td>VTS</td>
-                        <td><a href="https://www.kiyiemniyeti.gov.tr/fener_ve_tahsiliye_ucreti_hesaplayici" target="_blank">Hesapla</a></td>
-                    </tr>
-                    <tr>
-                        <td>Contribution to Maritime Chamber</td>
-                        <td>${contributionToMaritimeChamber.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Maritime Chamber Share from Freight Revenue</td>
-                        <td>${maritimeChamberShare.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Custom's Overtime</td>
-                        <td>Lütfen yerel ofise danışın.</td>
-                    </tr>
-                    <tr>
-                        <td>Motorboat</td>
-                        <td>Lütfen yerel ofise danışın.</td>
-                    </tr>
-                </table>
-                <p><strong>Not:</strong> PDA hesaplanırken resmi tatil günlerinden oluşan zamlar hesaba katılmaz.</p>
-            `;
+    // Result Table Update
+    var resultText = `
+        <table>
+            <tr>
+                <th>Charge Description</th>
+                <th>Amount (USD)</th>
+            </tr>
+            <tr>
+                <td>Harbour Master's Due</td>
+                <td>${harbourMastersDue.toFixed(2)} USD</td>
+            </tr>
+            <tr>
+                <td>Berth Dues</td>
+                <td>${berthDues.toFixed(2)} USD</td>
+            </tr>
+            <tr>
+                <td>Pilotage (Izmit Bay In + Out)</td>
+                <td>${pilotageIzmitBay.toFixed(2)} USD</td>
+            </tr>
+            <tr>
+                <td>Pilotage (Mooring + Unmooring)</td>
+                <td>${pilotageMooringUnmooring.toFixed(2)} USD</td>
+            </tr>
+            <tr>
+                <td>Tug Boat (Mooring + Unmooring)</td>
+                <td>${tugBoat.toFixed(2)} USD</td>
+            </tr>
+            <tr>
+                <td>Sanitary Dues</td>
+                <td>${sanitaryDues.toFixed(2)} USD</td>
+            </tr>
+            <tr>
+                <td>Garbage Dues</td>
+                <td>${garbageDues.toFixed(2)} USD</td>
+            </tr>
+            <tr>
+                <td>Mooring & Unmooring</td>
+                <td>${mooringUnmooring.toFixed(2)} USD</td>
+            </tr>
+            <tr>
+                <td>Anchorage Dues</td>
+                <td>${anchorageDues.toFixed(2)} USD</td>
+            </tr>
+            <tr>
+                <td>Pilotage Fee for Anchorage</td>
+                <td>${pilotageFeeForAnchorage.toFixed(2)} USD</td>
+            </tr>
+            <tr>
+                <td>Supervision</td>
+                <td>${supervision.toFixed(2)} USD</td>
+            </tr>
+            <tr>
+                <td>Agency Fee</td>
+                <td>${agencyFee.toFixed(2)} USD</td>
+            </tr>
+            <tr>
+                <td>Light Dues</td>
+                <td><a href="https://www.kiyiemniyeti.gov.tr/fener_ve_tahsiliye_ucreti_hesaplayici" target="_blank">Hesapla</a></td>
+            </tr>
+            <tr>
+                <td>VTS</td>
+                <td><a href="https://www.kiyiemniyeti.gov.tr/fener_ve_tahsiliye_ucreti_hesaplayici" target="_blank">Hesapla</a></td>
+            </tr>
+            <tr>
+                <td>Contribution to Maritime Chamber</td>
+                <td>${contributionToMaritimeChamber.toFixed(2)} USD</td>
+            </tr>
+            <tr>
+                <td>Maritime Chamber Share from Freight Revenue</td>
+                <td>${maritimeChamberShare.toFixed(2)} USD</td>
+            </tr>
+            <tr>
+                <td>Custom's Overtime</td>
+                <td>Lütfen yerel ofise veya Selahattin Abi'ye danışın.</td>
+            </tr>
+            <tr>
+                <td>Motorboat</td>
+                <td>Lütfen yerel ofise veya Selahattin Abi'ye danışın.</td>
+            </tr>
+        </table>
+        <p><strong>Not:</strong> PDA hesaplanırken resmi tatil günlerinden oluşan zamlar hesaba katılmaz.</p>
+    `;
 
-            document.getElementById("result").innerHTML = resultText;
-        }
+    document.getElementById("result").innerHTML = resultText;
+}
+
     </script>
 </body>
 </html>
