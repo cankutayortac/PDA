@@ -3,167 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ship Charges Calculator</title>
+    <title>Tariff Calculator</title>
     <style>
         :root {
-            --primary-color: #005f73;
-            --secondary-color: #0a9396;
-            --accent-color: #94d2bd;
-            --background-color: #e9d8a6;
-            --text-color: #001219;
-            --header-color: #ee9b00;
-            --button-hover-color: #ca6702;
+            --primary-color: #084050;
+            --secondary-color: #ebdba3;
+            --text-color: #333;
+            --border-color: #ccc;
+            --background-light: #ffffff;
+            --background-dark: #93d3bb;
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: var(--background-color);
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            background-color: var(--secondary-color);
             color: var(--text-color);
         }
 
-        .container {
-            background-color: #fff;
+        header {
+            background-color: var(--primary-color);
+            color: white;
             padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            width: 500px;
-            max-width: 100%;
-            margin-top: 2rem;
+            text-align: center;
+            font-size: 1.5rem;
+            margin: 0;
+            border-radius: 0;
         }
 
-        h1 {
-            text-align: center;
-            color: var(--header-color);
-            margin-bottom: 25px;
-            font-size: 26px;
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: var(--background-light);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
-        input[type="number"],
-        input[type="checkbox"],
-        select {
-            width: 95%;
+        input, select {
+            width: 100%;
             padding: 10px;
-            border-radius: 8px;
-            border: 1px solid var(--secondary-color);
-            font-size: 16px;
-            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 1rem;
         }
 
         button {
-            width: 100%;
-            padding: 12px;
             background-color: var(--primary-color);
             color: white;
+            padding: 12px 20px;
             border: none;
-            border-radius: 8px;
+            border-radius: 15px;
+            font-size: 1rem;
             cursor: pointer;
-            font-size: 18px;
             transition: background-color 0.3s;
         }
 
         button:hover {
-            background-color: var(--button-hover-color);
+            background-color: #0d4a59;
         }
 
-        .result {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: var(--accent-color);
-            border-radius: 8px;
-            color: var(--text-color);
-            line-height: 1.6;
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--background-dark);
+            border-left: 5px solid var(--primary-color);
+            border-radius: 15px;
         }
 
-        .result a {
-            color: var(--primary-color);
-            text-decoration: none;
+        .results h3 {
+            margin-top: 0;
+            font-size: 1.2rem;
         }
 
-        .result a:hover {
-            text-decoration: underline;
-        }
-
-        table {
+        .table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            font-size: 16px;
         }
 
-        th, td {
+        .table th, .table td {
+            border: 1px solid var(--border-color);
             padding: 12px;
-            border: 1px solid var(--secondary-color);
             text-align: left;
         }
 
-        th {
-            background-color: var(--primary-color);
-            color: white;
+        .table th {
+            background-color: var(--secondary-color);
+            font-weight: bold;
         }
 
         footer {
-            margin-top: 20px;
-            margin-bottom: 20px;
+            background-color: var(--primary-color);
+            color: white;
             text-align: center;
-            font-size: 14px;
-            color: var(--text-color);
+            padding: 10px;
+            margin: 0;
+            border-radius: 0;
         }
 
-        @media (max-width: 600px) {
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+
+        footer a img {
+            width: 100px;
+            vertical-align: middle;
+        }
+
+        h1 {
+            text-align: center;
+            color: #001e5f;
+            margin-bottom: 25px;
+            font-size: 26px;
+        }
+
+        @media (max-width: 768px) {
             .container {
-                width: 90%;
+                margin: 20px;
                 padding: 15px;
-                box-shadow: none;
-            }
-
-            h1 {
-                font-size: 22px;
-            }
-
-            label {
-                font-size: 14px;
-            }
-
-            input[type="number"],
-            input[type="checkbox"],
-            select {
-                padding: 8px;
-                font-size: 14px;
             }
 
             button {
-                padding: 10px;
-                font-size: 16px;
-            }
-
-            .result {
-                font-size: 14px;
-                padding: 12px;
-            }
-
-            table {
-                font-size: 14px;
-            }
-
-            th, td {
-                padding: 10px;
+                width: 100%;
+                padding: 15px;
             }
         }
     </style>
@@ -171,80 +147,67 @@
 <body>
     <div class="container">
         <h1>Gemi PDA Hesaplama Aracı</h1>
-        <form id="calculatorForm" onsubmit="calculateDues(); return false;">
+        <form id="tariffForm">
             <div class="form-group">
-                <label for="nrt">NRT (Net Register Tonnage):</label>
+                <label for="nrt">Net Registered Tonnage (NRT):</label>
                 <input type="number" id="nrt" name="nrt" required>
             </div>
-
             <div class="form-group">
-                <label for="grt">GRT (Gross Register Tonnage):</label>
+                <label for="grt">Gross Registered Tonnage (GRT):</label>
                 <input type="number" id="grt" name="grt" required>
             </div>
-
             <div class="form-group">
-                <label for="days">Limandaki operasyon süresi:</label>
+                <label for="days">Number of Days on Berth:</label>
                 <input type="number" id="days" name="days" required>
             </div>
-
             <div class="form-group">
-                <label for="freight">Yük miktarı (MT):</label>
-                <input type="number" id="freight" name="freight" required>
+                <label for="usdToTry">Exchange Rate (USD to TRY):</label>
+                <input type="number" id="usdToTry" name="usdToTry" step="0.01" required>
             </div>
-
             <div class="form-group">
-                <label for="bothLoadingAndUnloading">Çift operasyon (Aynı limanda tahliye ve yükleme varsa işaretleyiniz):</label>
-                <input type="checkbox" id="bothLoadingAndUnloading" name="bothLoadingAndUnloading">
-            </div>
-
-            <div class="form-group">
-                <label for="cargoType">Yükün cinsi:</label>
-                <select id="cargoType" name="cargoType" required>
-                    <option value="grain">Tahıl</option>
-                    <option value="bulkSolid">Katı dökme yük (hurda demir, vb.)</option>
-                    <option value="nonBulkIronSteel">Dökme olmayan katı yük (Demir çelik ürünleri vb.)</option>
-                    <option value="oil">Petrol harici yağlar</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="anchoragePeriod">Demirleme ücreti nasıl hesaplansın:</label>
-                <select id="anchoragePeriod" name="anchoragePeriod" required>
-                    <option value="daily">Günlük</option>
-                    <option value="monthly">Aylık</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="inIzmitBay">Gemi İzmit körfezine geliyorsa işaretleyin:</label>
-                <input type="checkbox" id="inIzmitBay" name="inIzmitBay">
-            </div>
-
-            <div class="form-group">
-                <label for="fromTurkishPort">Gemi başka bir Türk limanından geliyorsa işaretleyin:</label>
-                <input type="checkbox" id="fromTurkishPort" name="fromTurkishPort">
-            </div>
-
-            <div class="form-group">
-                <label for="usdToTl">Dolar-Tl çapraz kuru:</label>
-                <input type="number" id="usdToTl" name="usdToTl" step="0.01" required>
-            </div>
-
-            <div class="form-group">
-                <label for="eurToUsd">Euro-USD çapraz kuru:</label>
+                <label for="eurToUsd">Exchange Rate (EUR to USD):</label>
                 <input type="number" id="eurToUsd" name="eurToUsd" step="0.01" required>
             </div>
-
-            <button type="submit">HESAPLA</button>
+            <div class="form-group">
+                <label for="freight">Freight (in MT):</label>
+                <input type="number" id="freight" name="freight" required>
+            </div>
+            <div class="form-group">
+                <label for="cargoType">Cargo Type:</label>
+                <select id="cargoType" name="cargoType" required>
+                    <option value="solid_bulk">Solid Bulk</option>
+                    <option value="grain">Grain</option>
+                    <option value="pulses">Pulses</option>
+                    <option value="fresh_produce">Fresh Produce</option>
+                    <option value="block_goods">Block Goods</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="isTurkishFlag">Is the Ship Turkish-Flagged?</label>
+                <select id="isTurkishFlag" name="isTurkishFlag" required>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            <button type="button" onclick="calculateTariffs()">Calculate</button>
         </form>
 
-        <div id="result" class="result">
-            <!-- Calculation results will appear here -->
+        <div id="results" class="results" style="display: none;">
+            <h3>Calculation Results:</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Tariff Item</th>
+                        <th>Amount (USD)</th>
+                    </tr>
+                </thead>
+                <tbody id="resultDetails">
+                </tbody>
+            </table>
         </div>
     </div>
-
     <footer>
-        <p>&copy; 2024 Can Kutay Ortaç</p>
+        <p>&copy; 2025 Can Kutay Ortaç</p>
         Contact me
         <div style="display: flex; justify-content: center; gap: 20px;">
             <a href="https://www.linkedin.com/in/can-kutay-ortac-8a1620319/" target="_blank">
@@ -255,779 +218,181 @@
             </a>
         </div>
     </footer>
-    
-
     <script>
-        function calculateHarbourMastersDue(nrt) {
-            if (nrt >= 11 && nrt <= 500) {
-                return 750.00;
-            } else if (nrt >= 501 && nrt <= 2000) {
-                return 2000.00;
-            } else if (nrt >= 2001 && nrt <= 4000) {
-                return 4000.00;
-            } else if (nrt >= 4001 && nrt <= 8000) {
-                return 6000.00;
-            } else if (nrt >= 8001 && nrt <= 10000) {
-                return 10000.00;
-            } else if (nrt >= 10001 && nrt <= 30000) {
-                return 20000.00;
-            } else {
-                return 0;
-            }
-        }
+        // Supervision Fee Calculation Function
+        function calculateSupervisionFee(freight, cargoType) {
+            let supervisionFee = 0;
 
-        function calculateBerthDues(grt, days) {
-            var dailyRate = 0;
-
-            if (grt >= 0 && grt <= 500) {
-                dailyRate = 10.00;
-            } else if (grt >= 501 && grt <= 1000) {
-                dailyRate = 25.00;
-            } else if (grt >= 1001 && grt <= 2000) {
-                dailyRate = 50.00;
-            } else if (grt >= 2001 && grt <= 3000) {
-                dailyRate = 75.00;
-            } else if (grt >= 3001 && grt <= 4000) {
-                dailyRate = 100.00;
-            } else if (grt >= 4001 && grt <= 5000) {
-                dailyRate = 125.00;
-            } else if (grt >= 5001 && grt <= 6000) {
-                dailyRate = 150.00;
-            } else if (grt >= 6001 && grt <= 7000) {
-                dailyRate = 175.00;
-            } else if (grt >= 7001 && grt <= 8000) {
-                dailyRate = 200.00;
-            } else if (grt >= 8001 && grt <= 9000) {
-                dailyRate = 225.00;
-            } else if (grt >= 9001 && grt <= 10000) {
-                dailyRate = 250.00;
-            } else if (grt >= 10001 && grt <= 11000) {
-                dailyRate = 275.00;
-            } else if (grt >= 11001 && grt <= 12000) {
-                dailyRate = 300.00;
-            } else if (grt >= 12001 && grt <= 13000) {
-                dailyRate = 325.00;
-            } else if (grt >= 13001 && grt <= 14000) {
-                dailyRate = 350.00;
-            } else if (grt >= 14001 && grt <= 15000) {
-                dailyRate = 375.00;
-            } else if (grt >= 15001 && grt <= 16000) {
-                dailyRate = 400.00;
-            } else if (grt >= 16001 && grt <= 17000) {
-                dailyRate = 425.00;
-            } else if (grt >= 17001 && grt <= 18000) {
-                dailyRate = 450.00;
-            } else if (grt >= 18001 && grt <= 19000) {
-                dailyRate = 475.00;
-            } else if (grt >= 19001 && grt <= 20000) {
-                dailyRate = 500.00;
-            } else if (grt >= 20001 && grt <= 21000) {
-                dailyRate = 525.00;
-            } else if (grt >= 21001 && grt <= 22000) {
-                dailyRate = 550.00;
-            } else if (grt >= 22001 && grt <= 23000) {
-                dailyRate = 575.00;
-            } else if (grt >= 23001 && grt <= 24000) {
-                dailyRate = 600.00;
-            } else if (grt >= 24001 && grt <= 25000) {
-                dailyRate = 625.00;
-            } else if (grt >= 25001 && grt <= 26000) {
-                dailyRate = 650.00;
-            } else if (grt >= 26001 && grt <= 27000) {
-                dailyRate = 675.00;
-            } else if (grt >= 27001 && grt <= 28000) {
-                dailyRate = 700.00;
-            } else if (grt >= 28001 && grt <= 29000) {
-                dailyRate = 725.00;
-            } else if (grt >= 29001 && grt <= 30000) {
-                dailyRate = 750.00;
-            } else if (grt >= 30001 && grt <= 31000) {
-                dailyRate = 775.00;
-            } else if (grt >= 31001 && grt <= 32000) {
-                dailyRate = 800.00;
-            } else if (grt >= 32001 && grt <= 33000) {
-                dailyRate = 825.00;
-            } else if (grt >= 33001 && grt <= 34000) {
-                dailyRate = 850.00;
-            } else if (grt >= 34001 && grt <= 35000) {
-                dailyRate = 875.00;
-            } else if (grt >= 35001 && grt <= 36000) {
-                dailyRate = 900.00;
-            } else if (grt >= 36001 && grt <= 37000) {
-                dailyRate = 925.00;
-            } else if (grt >= 37001 && grt <= 38000) {
-                dailyRate = 950.00;
-            } else if (grt >= 38001 && grt <= 39000) {
-                dailyRate = 975.00;
-            } else if (grt >= 39001 && grt <= 40000) {
-                dailyRate = 1000.00;
-            } else {
-                dailyRate = 0;
-            }
-
-            return dailyRate * days;
-        }
-
-        function calculatePilotageIzmitBay(grt, inIzmitBay) {
-            if (!inIzmitBay) {
-                return 0; // İzmit Körfezi'nde değilse bu kalem 0 olur
-            }
-
-            var pilotageRate = 0;
-
-            if (grt >= 0 && grt <= 500) {
-                pilotageRate = 69.00;
-            } else if (grt >= 501 && grt <= 1000) {
-                pilotageRate = 138.00;
-            } else if (grt >= 1001 && grt <= 2000) {
-                pilotageRate = 204.00;
-            } else if (grt >= 2001 && grt <= 3000) {
-                pilotageRate = 270.00;
-            } else if (grt >= 3001 && grt <= 4000) {
-                pilotageRate = 336.00;
-            } else if (grt >= 4001 && grt <= 5000) {
-                pilotageRate = 402.00;
-            } else if (grt >= 5001 && grt <= 6000) {
-                pilotageRate = 468.00;
-            } else if (grt >= 6001 && grt <= 7000) {
-                pilotageRate = 534.00;
-            } else if (grt >= 7001 && grt <= 8000) {
-                pilotageRate = 600.00;
-            } else if (grt >= 8001 && grt <= 9000) {
-                pilotageRate = 666.00;
-            } else if (grt >= 9001 && grt <= 10000) {
-                pilotageRate = 732.00;
-            } else if (grt >= 10001 && grt <= 11000) {
-                pilotageRate = 798.00;
-            } else if (grt >= 11001 && grt <= 12000) {
-                pilotageRate = 864.00;
-            } else if (grt >= 12001 && grt <= 13000) {
-                pilotageRate = 930.00;
-            } else if (grt >= 13001 && grt <= 14000) {
-                pilotageRate = 996.00;
-            } else if (grt >= 14001 && grt <= 15000) {
-                pilotageRate = 1062.00;
-            } else if (grt >= 15001 && grt <= 16000) {
-                pilotageRate = 1128.00;
-            } else if (grt >= 16001 && grt <= 17000) {
-                pilotageRate = 1194.00;
-            } else if (grt >= 17001 && grt <= 18000) {
-                pilotageRate = 1260.00;
-            } else if (grt >= 18001 && grt <= 19000) {
-                pilotageRate = 1326.00;
-            } else if (grt >= 19001 && grt <= 20000) {
-                pilotageRate = 1392.00;
-            } else if (grt >= 20001 && grt <= 21000) {
-                pilotageRate = 1458.00;
-            } else if (grt >= 21001 && grt <= 22000) {
-                pilotageRate = 1524.00;
-            } else if (grt >= 22001 && grt <= 23000) {
-                pilotageRate = 1590.00;
-            } else if (grt >= 23001 && grt <= 24000) {
-                pilotageRate = 1656.00;
-            } else if (grt >= 24001 && grt <= 25000) {
-                pilotageRate = 1722.00;
-            } else if (grt >= 25001 && grt <= 26000) {
-                pilotageRate = 1788.00;
-            } else if (grt >= 26001 && grt <= 27000) {
-                pilotageRate = 1854.00;
-            } else if (grt >= 27001 && grt <= 28000) {
-                pilotageRate = 1920.00;
-            } else if (grt >= 28001 && grt <= 29000) {
-                pilotageRate = 1986.00;
-            } else if (grt >= 29001 && grt <= 30000) {
-                pilotageRate = 2052.00;
-            } else if (grt >= 30001 && grt <= 31000) {
-                pilotageRate = 2118.00;
-            } else if (grt >= 31001 && grt <= 32000) {
-                pilotageRate = 2184.00;
-            } else if (grt >= 32001 && grt <= 33000) {
-                pilotageRate = 2250.00;
-            } else if (grt >= 33001 && grt <= 34000) {
-                pilotageRate = 2316.00;
-            } else if (grt >= 34001 && grt <= 35000) {
-                pilotageRate = 2382.00;
-            } else if (grt >= 35001 && grt <= 36000) {
-                pilotageRate = 2448.00;
-            } else if (grt >= 36001 && grt <= 37000) {
-                pilotageRate = 2514.00;
-            } else if (grt >= 37001 && grt <= 38000) {
-                pilotageRate = 2580.00;
-            } else if (grt >= 38001 && grt <= 39000) {
-                pilotageRate = 2646.00;
-            } else if (grt >= 39001 && grt <= 40000) {
-                pilotageRate = 2712.00;
-            } else {
-                pilotageRate = 0;
-            }
-
-            return pilotageRate * 2; // Her durumda 2 ile çarpılır
-        }
-
-        function calculatePilotageMooringUnmooring(grt) {
-            var pilotageMooringRate = 0;
-
-            if (grt >= 0 && grt <= 500) {
-                pilotageMooringRate = 90.00;
-            } else if (grt >= 501 && grt <= 1000) {
-                pilotageMooringRate = 179.00;
-            } else if (grt >= 1001 && grt <= 2000) {
-                pilotageMooringRate = 253.00;
-            } else if (grt >= 2001 && grt <= 3000) {
-                pilotageMooringRate = 327.00;
-            } else if (grt >= 3001 && grt <= 4000) {
-                pilotageMooringRate = 401.00;
-            } else if (grt >= 4001 && grt <= 5000) {
-                pilotageMooringRate = 475.00;
-            } else if (grt >= 5001 && grt <= 6000) {
-                pilotageMooringRate = 549.00;
-            } else if (grt >= 6001 && grt <= 7000) {
-                pilotageMooringRate = 623.00;
-            } else if (grt >= 7001 && grt <= 8000) {
-                pilotageMooringRate = 697.00;
-            } else if (grt >= 8001 && grt <= 9000) {
-                pilotageMooringRate = 771.00;
-            } else if (grt >= 9001 && grt <= 10000) {
-                pilotageMooringRate = 845.00;
-            } else if (grt >= 10001 && grt <= 11000) {
-                pilotageMooringRate = 919.00;
-            } else if (grt >= 11001 && grt <= 12000) {
-                pilotageMooringRate = 993.00;
-            } else if (grt >= 12001 && grt <= 13000) {
-                pilotageMooringRate = 1067.00;
-            } else if (grt >= 13001 && grt <= 14000) {
-                pilotageMooringRate = 1141.00;
-            } else if (grt >= 14001 && grt <= 15000) {
-                pilotageMooringRate = 1215.00;
-            } else if (grt >= 15001 && grt <= 16000) {
-                pilotageMooringRate = 1289.00;
-            } else if (grt >= 16001 && grt <= 17000) {
-                pilotageMooringRate = 1363.00;
-            } else if (grt >= 17001 && grt <= 18000) {
-                pilotageMooringRate = 1437.00;
-            } else if (grt >= 18001 && grt <= 19000) {
-                pilotageMooringRate = 1511.00;
-            } else if (grt >= 19001 && grt <= 20000) {
-                pilotageMooringRate = 1585.00;
-            } else if (grt >= 20001 && grt <= 21000) {
-                pilotageMooringRate = 1659.00;
-            } else if (grt >= 21001 && grt <= 22000) {
-                pilotageMooringRate = 1733.00;
-            } else if (grt >= 22001 && grt <= 23000) {
-                pilotageMooringRate = 1807.00;
-            } else if (grt >= 23001 && grt <= 24000) {
-                pilotageMooringRate = 1881.00;
-            } else if (grt >= 24001 && grt <= 25000) {
-                pilotageMooringRate = 1955.00;
-            } else if (grt >= 25001 && grt <= 26000) {
-                pilotageMooringRate = 2029.00;
-            } else if (grt >= 26001 && grt <= 27000) {
-                pilotageMooringRate = 2103.00;
-            } else if (grt >= 27001 && grt <= 28000) {
-                pilotageMooringRate = 2177.00;
-            } else if (grt >= 28001 && grt <= 29000) {
-                pilotageMooringRate = 2251.00;
-            } else if (grt >= 29001 && grt <= 30000) {
-                pilotageMooringRate = 2325.00;
-            } else if (grt >= 30001 && grt <= 31000) {
-                pilotageMooringRate = 2399.00;
-            } else if (grt >= 31001 && grt <= 32000) {
-                pilotageMooringRate = 2473.00;
-            } else if (grt >= 32001 && grt <= 33000) {
-                pilotageMooringRate = 2547.00;
-            } else if (grt >= 33001 && grt <= 34000) {
-                pilotageMooringRate = 2621.00;
-            } else if (grt >= 34001 && grt <= 35000) {
-                pilotageMooringRate = 2695.00;
-            } else if (grt >= 35001 && grt <= 36000) {
-                pilotageMooringRate = 2769.00;
-            } else if (grt >= 36001 && grt <= 37000) {
-                pilotageMooringRate = 2843.00;
-            } else if (grt >= 37001 && grt <= 38000) {
-                pilotageMooringRate = 2917.00;
-            } else if (grt >= 38001 && grt <= 39000) {
-                pilotageMooringRate = 2991.00;
-            } else if (grt >= 39001 && grt <= 40000) {
-                pilotageMooringRate = 3065.00;
-            } else {
-                pilotageMooringRate = 0;
-            }
-
-            return pilotageMooringRate * 2; // Her durumda 2 ile çarpılır
-        }
-
-        function calculateTugBoat(grt) {
-            var tugBoatRate = 0;
-            var multiplier = 0;
-
-            if (grt < 2000) {
-                return 0;
-            } else if (grt >= 2000 && grt <= 5000) {
-                multiplier = 2; // GRT 2000 ile 5000 arasında ise 2 ile çarpılır
-            } else if (grt > 5000) {
-                multiplier = 4; // GRT 5000'den büyükse 4 ile çarpılır
-            }
-
-            if (grt >= 0 && grt <= 1000) {
-                tugBoatRate = 311.00;
-            } else if (grt >= 1001 && grt <= 2000) {
-                tugBoatRate = 369.00;
-            } else if (grt >= 2001 && grt <= 3000) {
-                tugBoatRate = 427.00;
-            } else if (grt >= 3001 && grt <= 4000) {
-                tugBoatRate = 485.00;
-            } else if (grt >= 4001 && grt <= 5000) {
-                tugBoatRate = 543.00;
-            } else if (grt >= 5001 && grt <= 6000) {
-                tugBoatRate = 601.00;
-            } else if (grt >= 6001 && grt <= 7000) {
-                tugBoatRate = 659.00;
-            } else if (grt >= 7001 && grt <= 8000) {
-                tugBoatRate = 717.00;
-            } else if (grt >= 8001 && grt <= 9000) {
-                tugBoatRate = 775.00;
-            } else if (grt >= 9001 && grt <= 10000) {
-                tugBoatRate = 833.00;
-            } else if (grt >= 10001 && grt <= 11000) {
-                tugBoatRate = 891.00;
-            } else if (grt >= 11001 && grt <= 12000) {
-                tugBoatRate = 949.00;
-            } else if (grt >= 12001 && grt <= 13000) {
-                tugBoatRate = 1007.00;
-            } else if (grt >= 13001 && grt <= 14000) {
-                tugBoatRate = 1065.00;
-            } else if (grt >= 14001 && grt <= 15000) {
-                tugBoatRate = 1123.00;
-            } else if (grt >= 15001 && grt <= 16000) {
-                tugBoatRate = 1181.00;
-            } else if (grt >= 16001 && grt <= 17000) {
-                tugBoatRate = 1239.00;
-            } else if (grt >= 17001 && grt <= 18000) {
-                tugBoatRate = 1297.00;
-            } else if (grt >= 18001 && grt <= 19000) {
-                tugBoatRate = 1355.00;
-            } else if (grt >= 19001 && grt <= 20000) {
-                tugBoatRate = 1413.00;
-            } else if (grt >= 20001 && grt <= 21000) {
-                tugBoatRate = 1471.00;
-            } else if (grt >= 21001 && grt <= 22000) {
-                tugBoatRate = 1529.00;
-            } else if (grt >= 22001 && grt <= 23000) {
-                tugBoatRate = 1587.00;
-            } else if (grt >= 23001 && grt <= 24000) {
-                tugBoatRate = 1645.00;
-            } else if (grt >= 24001 && grt <= 25000) {
-                tugBoatRate = 1703.00;
-            } else if (grt >= 25001 && grt <= 26000) {
-                tugBoatRate = 1761.00;
-            } else if (grt >= 26001 && grt <= 27000) {
-                tugBoatRate = 1819.00;
-            } else if (grt >= 27001 && grt <= 28000) {
-                tugBoatRate = 1877.00;
-            } else if (grt >= 28001 && grt <= 29000) {
-                tugBoatRate = 1935.00;
-            } else if (grt >= 29001 && grt <= 30000) {
-                tugBoatRate = 1993.00;
-            } else if (grt >= 30001 && grt <= 31000) {
-                tugBoatRate = 2051.00;
-            } else if (grt >= 31001 && grt <= 32000) {
-                tugBoatRate = 2109.00;
-            } else if (grt >= 32001 && grt <= 33000) {
-                tugBoatRate = 2167.00;
-            } else if (grt >= 33001 && grt <= 34000) {
-                tugBoatRate = 2225.00;
-            } else if (grt >= 34001 && grt <= 35000) {
-                tugBoatRate = 2283.00;
-            } else if (grt >= 35001 && grt <= 36000) {
-                tugBoatRate = 2341.00;
-            } else if (grt >= 36001 && grt <= 37000) {
-                tugBoatRate = 2399.00;
-            } else if (grt >= 37001 && grt <= 38000) {
-                tugBoatRate = 2457.00;
-            } else if (grt >= 38001 && grt <= 39000) {
-                tugBoatRate = 2515.00;
-            } else if (grt >= 39001 && grt <= 40000) {
-                tugBoatRate = 2573.00;
-            } else {
-                tugBoatRate = 0;
-            }
-
-            return tugBoatRate * multiplier;
-        }
-
-        function calculateSanitaryDues(nrt) {
-            return nrt * 12;
-        }
-
-        function calculateGarbageDues(grt) {
-            if (grt >= 0 && grt <= 1000) {
-                return 80;
-            } else if (grt >= 1001 && grt <= 5000) {
-                return 140;
-            } else if (grt >= 5001 && grt <= 10000) {
-                return 210;
-            } else if (grt >= 10001 && grt <= 15000) {
-                return 250;
-            } else if (grt >= 15001 && grt <= 20000) {
-                return 300;
-            } else if (grt >= 20001 && grt <= 25000) {
-                return 350;
-            } else if (grt >= 25001 && grt <= 35000) {
-                return 400;
-            } else {
-                return 0;
-            }
-        }
-
-        function calculateMooringUnmooring(grt, bothLoadingAndUnloading) {
-    var mooringRate = 0;
-
-    if (grt >= 0 && grt <= 1000) {
-        mooringRate = 35.00;
-    } else if (grt >= 1001 && grt <= 2000) {
-        mooringRate = 54.00;
-    } else if (grt >= 2001 && grt <= 3000) {
-        mooringRate = 72.00;
-    } else if (grt >= 3001 && grt <= 4000) {
-        mooringRate = 90.00;
-    } else if (grt >= 4001 && grt <= 5000) {
-        mooringRate = 108.00;
-    } else if (grt >= 5001 && grt <= 6000) {
-        mooringRate = 126.00;
-    } else if (grt >= 6001 && grt <= 7000) {
-        mooringRate = 144.00;
-    } else if (grt >= 7001 && grt <= 8000) {
-        mooringRate = 162.00;
-    } else if (grt >= 8001 && grt <= 9000) {
-        mooringRate = 180.00;
-    } else if (grt >= 9001 && grt <= 10000) {
-        mooringRate = 198.00;
-    } else if (grt >= 10001 && grt <= 11000) {
-        mooringRate = 216.00;
-    } else if (grt >= 11001 && grt <= 12000) {
-        mooringRate = 234.00;
-    } else if (grt >= 12001 && grt <= 13000) {
-        mooringRate = 252.00;
-    } else if (grt >= 13001 && grt <= 14000) {
-        mooringRate = 270.00;
-    } else if (grt >= 14001 && grt <= 15000) {
-        mooringRate = 288.00;
-    } else if (grt >= 15001 && grt <= 16000) {
-        mooringRate = 306.00;
-    } else if (grt >= 16001 && grt <= 17000) {
-        mooringRate = 324.00;
-    } else if (grt >= 17001 && grt <= 18000) {
-        mooringRate = 342.00;
-    } else if (grt >= 18001 && grt <= 19000) {
-        mooringRate = 360.00;
-    } else if (grt >= 19001 && grt <= 20000) {
-        mooringRate = 378.00;
-    } else if (grt >= 20001 && grt <= 21000) {
-        mooringRate = 396.00;
-    } else if (grt >= 21001 && grt <= 22000) {
-        mooringRate = 414.00;
-    } else if (grt >= 22001 && grt <= 23000) {
-        mooringRate = 432.00;
-    } else if (grt >= 23001 && grt <= 24000) {
-        mooringRate = 450.00;
-    } else if (grt >= 24001 && grt <= 25000) {
-        mooringRate = 468.00;
-    } else if (grt >= 25001 && grt <= 26000) {
-        mooringRate = 486.00;
-    } else if (grt >= 26001 && grt <= 27000) {
-        mooringRate = 504.00;
-    } else if (grt >= 27001 && grt <= 28000) {
-        mooringRate = 522.00;
-    } else if (grt >= 28001 && grt <= 29000) {
-        mooringRate = 540.00;
-    } else if (grt >= 29001 && grt <= 30000) {
-        mooringRate = 558.00;
-    } else if (grt >= 30001 && grt <= 31000) {
-        mooringRate = 576.00;
-    } else if (grt >= 31001 && grt <= 32000) {
-        mooringRate = 594.00;
-    } else if (grt >= 32001 && grt <= 33000) {
-        mooringRate = 612.00;
-    } else if (grt >= 33001 && grt <= 34000) {
-        mooringRate = 630.00;
-    } else if (grt >= 34001 && grt <= 35000) {
-        mooringRate = 648.00;
-    } else if (grt >= 35001 && grt <= 36000) {
-        mooringRate = 666.00;
-    } else if (grt >= 36001 && grt <= 37000) {
-        mooringRate = 684.00;
-    } else if (grt >= 37001 && grt <= 38000) {
-        mooringRate = 702.00;
-    } else if (grt >= 38001 && grt <= 39000) {
-        mooringRate = 720.00;
-    } else if (grt >= 39001 && grt <= 40000) {
-        mooringRate = 738.00;
-    } else {
-        mooringRate = 0;
-    }
-
-    // Tek limanda çift operasyon varsa 2 ile çarpılır
-    return mooringRate * (bothLoadingAndUnloading ? 2 : 1);
-}
-
-
-        function calculateAnchorageDues(grt, period) {
-            if (period === 'daily') {
-                return grt * 0.004;
-            } else if (period === 'monthly') {
-                return grt * 0.100;
-            } else {
-                return 0;
-            }
-        }
-
-        function calculatePilotageFeeForAnchorage(grt, inIzmitBay) {
-            if (!inIzmitBay) {
-                return 0; // İzmit Körfezi'nde değilse bu kalem 0 olur
-            }
-            
-            var baseFee = calculatePilotageIzmitBay(grt, true);
-            return baseFee * 0.2; // Yeni kurala göre 2 ile çarpılmıyor, sadece %20'si alınıyor
-        }
-
-        function calculateSupervision(freight, cargoType) {
-            var supervisionFee = 0;
-
-            if (cargoType === "grain") {
-                supervisionFee = (freight <= 10000) ? freight * 0.10 : 10000 * 0.10 + (freight - 10000) * 0.075;
-            } else if (cargoType === "bulkSolid") {
-                supervisionFee = (freight <= 10000) ? freight * 0.15 : 10000 * 0.15 + (freight - 10000) * 0.10;
-            } else if (cargoType === "nonBulkIronSteel") {
-                supervisionFee = (freight <= 5000) ? freight * 0.25 : 5000 * 0.25 + (freight - 5000) * 0.15;
-            } else if (cargoType === "oil") {
-                supervisionFee = freight * 0.15;
-            } else {
-                supervisionFee = 0;
+            if (cargoType === "solid_bulk") {
+                if (freight <= 10000) supervisionFee = freight * 0.15;
+                else if (freight <= 20000) supervisionFee = (10000 * 0.15) + ((freight - 10000) * 0.10);
+                else supervisionFee = (10000 * 0.15) + (10000 * 0.10) + ((freight - 20000) * 0.05);
+            } else if (cargoType === "grain") {
+                if (freight <= 10000) supervisionFee = freight * 0.10;
+                else if (freight <= 25000) supervisionFee = (10000 * 0.10) + ((freight - 10000) * 0.075);
+                else supervisionFee = (10000 * 0.10) + (15000 * 0.075) + ((freight - 25000) * 0.045);
+            } else if (cargoType === "pulses") {
+                if (freight <= 5000) supervisionFee = freight * 0.30;
+                else supervisionFee = (5000 * 0.30) + ((freight - 5000) * 0.15);
+            } else if (cargoType === "fresh_produce") {
+                supervisionFee = freight * 1.00;
+            } else if (cargoType === "block_goods") {
+                if (freight <= 20000) supervisionFee = freight * 0.15;
+                else supervisionFee = (20000 * 0.15) + ((freight - 20000) * 0.05);
             }
 
             return supervisionFee;
         }
 
-        function calculateAgencyFee(nrt, bothLoadingAndUnloading) {
-            var agencyFee = 0;
+        function calculateTariffs() {
+            const nrt = parseFloat(document.getElementById('nrt').value);
+            const grt = parseFloat(document.getElementById('grt').value);
+            const days = parseInt(document.getElementById('days').value, 10);
+            const usdToTry = parseFloat(document.getElementById('usdToTry').value);
+            const eurToUsd = parseFloat(document.getElementById('eurToUsd').value);
+            const freight = parseFloat(document.getElementById('freight').value);
+            const cargoType = document.getElementById('cargoType').value;
+            const isTurkishFlag = document.getElementById('isTurkishFlag').value === 'yes';
 
-            if (nrt >= 0 && nrt <= 500) {
-                agencyFee = 600.00;
-            } else if (nrt >= 501 && nrt <= 1000) {
-                agencyFee = 1000.00;
-            } else if (nrt >= 1001 && nrt <= 2000) {
-                agencyFee = 1500.00;
-            } else if (nrt >= 2001 && nrt <= 3000) {
-                agencyFee = 1850.00;
-            } else if (nrt >= 3001 && nrt <= 4000) {
-                agencyFee = 2300.00;
-            } else if (nrt >= 4001 && nrt <= 5000) {
-                agencyFee = 2750.00;
-            } else if (nrt >= 5001 && nrt <= 7500) {
-                agencyFee = 3200.00;
-            } else if (nrt >= 7501 && nrt <= 10000) {
-                agencyFee = 4000.00;
-            } else if (nrt > 10000) {
-                agencyFee = 4000.00 + Math.ceil((nrt - 10000) / 1000) * 125.00;
+            if (isNaN(freight) || !cargoType) {
+                alert('Please enter valid values for freight and cargo type.');
+                return;
             }
 
-            return agencyFee * (bothLoadingAndUnloading ? 2 : 1); // Tek limanda çift operasyon varsa 2 ile çarpılır
-        }
+            let results = "";
 
-        function calculateContributionToMaritimeChamber(grt) {
-            if (grt >= 0 && grt <= 500) {
-                return 1000.00;
-            } else if (grt >= 501 && grt <= 1000) {
-                return 1700.00;
-            } else if (grt >= 1001 && grt <= 1500) {
-                return 2000.00;
-            } else if (grt >= 1501 && grt <= 2000) {
-                return 2500.00;
-            } else if (grt >= 2001 && grt <= 2500) {
-                return 3000.00;
-            } else if (grt >= 2501 && grt <= 5000) {
-                return 3500.00;
-            } else if (grt >= 5001 && grt <= 10000) {
-                return 4000.00;
-            } else if (grt >= 10001 && grt <= 25000) {
-                return 4500.00;
-            } else if (grt > 25000) {
-                return 5000.00;
+            // Supervision Fee Calculation
+            const supervisionFee = calculateSupervisionFee(freight, cargoType);
+            results += `<tr><td>Supervision Fee</td><td>${supervisionFee.toFixed(2)}</td></tr>`;
+
+            // Harbour Master Dues Calculation
+            let harbourDues = 0;
+            if (nrt <= 500) harbourDues = 1079.4;
+            else if (nrt <= 2000) harbourDues = 2878.6;
+            else if (nrt <= 4000) harbourDues = 5757.2;
+            else if (nrt <= 8000) harbourDues = 8635.8;
+            else if (nrt <= 10000) harbourDues = 14393;
+            else if (nrt <= 30000) harbourDues = 28786;
+            else if (nrt <= 50000) harbourDues = 43179;
+            else harbourDues = 71965;
+            harbourDues /= usdToTry;
+            results += `<tr><td>Harbour Master Dues</td><td>${harbourDues.toFixed(2)}</td></tr>`;
+
+            // Berth Dues Calculation
+            let berthDues = 0;
+            const berthRate = grt <= 500 ? 10 : Math.ceil(grt / 1000) * 25;
+            berthDues = berthRate * days * (isTurkishFlag ? 0.5 : 1);
+            results += `<tr><td>Berth Dues</td><td>${berthDues.toFixed(2)}</td></tr>`;
+
+           
+            // Pilotage (Izmit Bay In + Out)
+            let pilotageIzmit = grt <= 1000 ? 152 : 152 + Math.ceil((grt - 1000) / 1000) * 73;
+            if (isTurkishFlag) pilotageIzmit *= 0.5;
+            pilotageIzmit *= 2;
+            results += `<tr><td>Pilotage (Izmit Bay In + Out)</td><td>${pilotageIzmit.toFixed(2)}</td></tr>`;
+
+            // Pilotage (Mooring + Unmooring)
+            let pilotageMooring = isTurkishFlag ? 70 : 197;
+            if (grt > 1000) pilotageMooring += Math.ceil((grt - 1000) / 1000) * (isTurkishFlag ? 25 : 81);
+            pilotageMooring *= 2;
+            results += `<tr><td>Pilotage (Mooring + Unmooring)</td><td>${pilotageMooring.toFixed(2)}</td></tr>`;
+
+            // Tug Boat (Mooring + Unmooring)
+            let tugBoatFee = 0;
+            if (grt >= 2000) {
+                const tugCount = grt > 5000 ? 4 : 2;
+                tugBoatFee = (isTurkishFlag ? 119 : 373) + Math.ceil((grt - 1000) / 1000) * (isTurkishFlag ? 25 : 70);
+                tugBoatFee *= tugCount;
+            }
+            results += `<tr><td>Tug Boat Fee</td><td>${tugBoatFee.toFixed(2)}</td></tr>`;
+
+            // Contribution to Maritime Chamber of Shipping
+            let chamberFee = 0;
+            if (isTurkishFlag) {
+                if (nrt <= 500) chamberFee = 670;
+                else if (nrt <= 1500) chamberFee = 1120;
+                else if (nrt <= 2500) chamberFee = 2050;
+                else if (nrt <= 5000) chamberFee = 2800;
+                else if (nrt <= 10000) chamberFee = 3400;
+                else if (nrt <= 25000) chamberFee = 4000;
+                else if (nrt <= 35000) chamberFee = 4500;
+                else if (nrt <= 50000) chamberFee = 5000;
+                else chamberFee = 5300;
             } else {
-                return 0;
+                if (nrt <= 500) chamberFee = 1400;
+                else if (nrt <= 1500) chamberFee = 2800;
+                else if (nrt <= 2500) chamberFee = 4200;
+                else if (nrt <= 5000) chamberFee = 4900;
+                else if (nrt <= 10000) chamberFee = 5600;
+                else if (nrt <= 25000) chamberFee = 6300;
+                else if (nrt <= 35000) chamberFee = 7000;
+                else if (nrt <= 50000) chamberFee = 7500;
+                else chamberFee = 8000;
             }
-        }
+            chamberFee /= usdToTry;
+            results += `<tr><td>Maritime Chamber Fee</td><td>${chamberFee.toFixed(2)}</td></tr>`;
 
-        function calculateMaritimeChamberShare(freight, bothLoadingAndUnloading) {
-            var baseRate = 0;
+           // Maritime Chamber Share from Freight Revenue (%0.5)
+let freightShareFee = 0;
 
-            if (freight >= 0 && freight <= 20000) {
-                baseRate = 580.00;
-            } else if (freight >= 20001 && freight <= 40000) {
-                baseRate = 870.00;
-            } else if (freight >= 40001 && freight <= 60000) {
-                baseRate = 1130.00;
-            } else {
-                baseRate = 0;
+// Türk bayraklı kontrolü
+if (!isTurkishFlag) {
+    if (freight <= 20000) {
+        freightShareFee = 650;
+    } else if (freight <= 40000) {
+        freightShareFee = 1000;
+    } else if (freight <= 60000) {
+        freightShareFee = 1300;
+    } else if (freight <= 100000) {
+        freightShareFee = 1600;
+    } else {
+        freightShareFee = 2000;
+    }
+} else {
+    freightShareFee = 0; // Türk bayraklı ise sıfır
+}
+
+results += `<tr><td>Freight Revenue Share Fee</td><td>${freightShareFee.toFixed(2)}</td></tr>`;
+
+
+            // Agency Fee Calculation
+            let agencyFeeEUR = 0;
+            if (nrt <= 500) agencyFeeEUR = 600;
+            else if (nrt <= 1000) agencyFeeEUR = 1000;
+            else if (nrt <= 2000) agencyFeeEUR = 1500;
+            else if (nrt <= 3000) agencyFeeEUR = 1850;
+            else if (nrt <= 4000) agencyFeeEUR = 2300;
+            else if (nrt <= 5000) agencyFeeEUR = 2750;
+            else if (nrt <= 7500) agencyFeeEUR = 3200;
+            else if (nrt <= 10000) agencyFeeEUR = 4000;
+            else agencyFeeEUR = 4000 + Math.ceil((nrt - 10000) / 1000) * 125;
+            let agencyFeeUSD = agencyFeeEUR * eurToUsd;
+            results += `<tr><td>Agency Fee</td><td>${agencyFeeUSD.toFixed(2)}</td></tr>`;
+
+            // Sanitary Dues Calculation
+            let sanitaryDues = isTurkishFlag ? 0 : nrt * 17.27 / usdToTry;
+            results += `<tr><td>Sanitary Dues</td><td>${sanitaryDues.toFixed(2)}</td></tr>`;
+
+            // Garbage Landing Fee Calculation
+            let garbageFee = 0;
+            if (!isTurkishFlag) {
+                if (grt <= 1000) garbageFee = 80;
+                else if (grt <= 5000) garbageFee = 140;
+                else if (grt <= 10000) garbageFee = 210;
+                else garbageFee = 250;
             }
+            results += `<tr><td>Garbage Landing Fee</td><td>${garbageFee.toFixed(2)}</td></tr>`;
 
-            if (bothLoadingAndUnloading) {
-                return baseRate * 1.5; // Hem yükleme hem boşaltma için 1.5 katı
-            }
+            // Palamar Fee Calculation
+            let palamarFee = isTurkishFlag ? (grt <= 1000 ? 11 : 11 + Math.ceil((grt - 1000) / 1000) * 6)
+                                           : (grt <= 1000 ? 22 : 22 + Math.ceil((grt - 1000) / 1000) * 11);
+            results += `<tr><td>Mooring Fee</td><td>${palamarFee.toFixed(2)}</td></tr>`;
 
-            return baseRate;
-        }
 
-        function applyRules(cargoType, fromTurkishPort, bothLoadingAndUnloading) {
-            var chargeMultiplier = 1;
+           
 
-            // Eğer yük türü yağ ise tehlikeli sınıfına girer ve %30 zam uygulanır
-            if (cargoType === "oil") {
-                chargeMultiplier = 1.3;
-            }
-
-            // Eğer gemi başka bir Türk limanından geliyorsa, Sanitary ve Garbage Dues hesaplanmaz
-            var sanitaryDuesMultiplier = fromTurkishPort ? 0 : 1;
-            var garbageDuesMultiplier = fromTurkishPort ? 0 : 1;
-
-            // Eğer gemi tek limanda çift operasyon yapacaksa, belirli kalemler 2 ile çarpılır
-            var pilotageMooringMultiplier = bothLoadingAndUnloading ? 2 : 1;
-            var mooringUnmooringMultiplier = bothLoadingAndUnloading ? 2 : 1;
-            var agencyFeeMultiplier = bothLoadingAndUnloading ? 2 : 1;
-
-            return {
-                chargeMultiplier: chargeMultiplier,
-                sanitaryDuesMultiplier: sanitaryDuesMultiplier,
-                garbageDuesMultiplier: garbageDuesMultiplier,
-                pilotageMooringMultiplier: pilotageMooringMultiplier,
-                mooringUnmooringMultiplier: mooringUnmooringMultiplier,
-                agencyFeeMultiplier: agencyFeeMultiplier
-            };
-        }
-
-        function convertToUSD(amount, currency, usdToTl, eurToUsd) {
-            if (currency === "TL") {
-                return amount / usdToTl;
-            } else if (currency === "EUR") {
-                return amount * eurToUsd;
-            } else {
-                return amount; // USD ise bir şey yapma
-            }
-        }
-
-        function calculateDues() {
-            var nrt = parseFloat(document.getElementById("nrt").value);
-            var grt = parseFloat(document.getElementById("grt").value);
-            var days = parseFloat(document.getElementById("days").value);
-            var freight = parseFloat(document.getElementById("freight").value);
-            var bothLoadingAndUnloading = document.getElementById("bothLoadingAndUnloading").checked;
-            var cargoType = document.getElementById("cargoType").value;
-            var anchoragePeriod = parseFloat(document.getElementById("anchoragePeriod").value);
-            var inIzmitBay = document.getElementById("inIzmitBay").checked;
-            var fromTurkishPort = document.getElementById("fromTurkishPort").checked;
-            var usdToTl = parseFloat(document.getElementById("usdToTl").value);
-            var eurToUsd = parseFloat(document.getElementById("eurToUsd").value);
-
-            var rules = applyRules(cargoType, fromTurkishPort, bothLoadingAndUnloading);
-
-            var harbourMastersDue = convertToUSD(calculateHarbourMastersDue(nrt), "TL", usdToTl, eurToUsd);
-            var berthDues = calculateBerthDues(grt, days);
-            var pilotageIzmitBay = convertToUSD(calculatePilotageIzmitBay(grt, inIzmitBay) * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
-            var pilotageMooringUnmooring = convertToUSD(calculatePilotageMooringUnmooring(grt) * rules.pilotageMooringMultiplier * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
-            var tugBoat = convertToUSD(calculateTugBoat(grt) * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
-            var sanitaryDues = convertToUSD(calculateSanitaryDues(nrt) * rules.sanitaryDuesMultiplier, "TL", usdToTl, eurToUsd);
-            var garbageDues = convertToUSD(calculateGarbageDues(grt) * rules.garbageDuesMultiplier, "EUR", usdToTl, eurToUsd);
-            var mooringUnmooring = convertToUSD(calculateMooringUnmooring(grt, bothLoadingAndUnloading) * rules.mooringUnmooringMultiplier * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
-            var anchorageDues = convertToUSD(calculateAnchorageDues(grt, anchoragePeriod), "USD", usdToTl, eurToUsd);
-            var pilotageFeeForAnchorage = convertToUSD(calculatePilotageFeeForAnchorage(grt, inIzmitBay) * rules.chargeMultiplier, "USD", usdToTl, eurToUsd);
-            var supervision = convertToUSD(calculateSupervision(freight, cargoType), "EUR", usdToTl, eurToUsd);
-            var agencyFee = convertToUSD(calculateAgencyFee(nrt, bothLoadingAndUnloading) * rules.agencyFeeMultiplier, "EUR", usdToTl, eurToUsd);
-            var contributionToMaritimeChamber = convertToUSD(calculateContributionToMaritimeChamber(grt), "TL", usdToTl, eurToUsd);
-            var maritimeChamberShare = convertToUSD(calculateMaritimeChamberShare(freight, bothLoadingAndUnloading), "USD", usdToTl, eurToUsd);
-
-            var resultText = `
-                <table>
-                    <tr>
-                        <th>Masraf Kalemleri</th>
-                        <th>Tutar (USD)</th>
-                    </tr>
-                    <tr>
-                        <td>Harbour Master's Due</td>
-                        <td>${harbourMastersDue.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Berth Dues</td>
-                        <td>${berthDues.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Pilotage (Izmit Bay In + Out)</td>
-                        <td>${pilotageIzmitBay.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Pilotage (Mooring + Unmooring)</td>
-                        <td>${pilotageMooringUnmooring.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Tug Boat (Mooring + Unmooring)</td>
-                        <td>${tugBoat.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Sanitary Dues</td>
-                        <td>${sanitaryDues.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Garbage Dues</td>
-                        <td>${garbageDues.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Mooring & Unmooring</td>
-                        <td>${mooringUnmooring.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Anchorage Dues</td>
-                        <td>${anchorageDues.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Pilotage Fee for Anchorage</td>
-                        <td>${pilotageFeeForAnchorage.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Supervision</td>
-                        <td>${supervision.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Agency Fee</td>
-                        <td>${agencyFee.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Light Dues</td>
-                        <td><a href="https://www.kiyiemniyeti.gov.tr/fener_ve_tahsiliye_ucreti_hesaplayici" target="_blank">Hesapla</a></td>
-                    </tr>
-                    <tr>
-                        <td>VTS</td>
-                        <td><a href="https://www.kiyiemniyeti.gov.tr/fener_ve_tahsiliye_ucreti_hesaplayici" target="_blank">Hesapla</a></td>
-                    </tr>
-                    <tr>
-                        <td>Contribution to Maritime Chamber</td>
-                        <td>${contributionToMaritimeChamber.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Maritime Chamber Share from Freight Revenue</td>
-                        <td>${maritimeChamberShare.toFixed(2)} USD</td>
-                    </tr>
-                    <tr>
-                        <td>Custom's Overtime</td>
-                        <td>Lütfen yerel ofisinize veya yetkili makama danışın.</td>
-                    </tr>
-                    <tr>
-                        <td>Motorboat</td>
-                        <td>Lütfen yerel ofisinize veya yetkili makama danışın.</td>
-                    </tr>
-                </table>
-                <p><strong>Not:</strong> PDA hesaplanırken resmi tatil günlerinden oluşan zamlar hesaba katılmaz.</p>
-            `;
-
-            document.getElementById("result").innerHTML = resultText;
+            document.getElementById('resultDetails').innerHTML = results;
+            document.getElementById('results').style.display = 'block';
         }
     </script>
 </body>
